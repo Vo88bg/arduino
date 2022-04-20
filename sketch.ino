@@ -13,12 +13,13 @@ void setup() {
   // put your setup code here, to run once:
 
     pinMode(button, INPUT_PULLUP);
+    receiver.enableIRIn();
     target1.attach(6);
     target2.attach(5);
     target3.attach(3);
-    target1.write(90);
-    target2.write(90);
-    target3.write(90);
+    target1.write(0);
+    target2.write(0);
+    target3.write(0);
 
 }
 
@@ -33,10 +34,13 @@ void spinTarget() {
   } else if(multipleTargetsSpin==1) {
       spinAllTargets(delaySize);
   } else {
-      target.write(0);
-      delay(delaySize);
       target.write(90);
+      delay(delaySize);
+      target.write(0);
   }
+
+
+
   delay(2000);
 }
 
@@ -44,7 +48,8 @@ void spinTarget() {
 void spinMultipleTargets(Servo target, int targetNum, int delaySize){
     Servo currentTargets[2];
     currentTargets[0] = target;
-    target.write(0);
+    target.write(90);
+
     int prevTarget = targetNum;
     targetNum = random(3);
     while(targetNum == prevTarget){
@@ -53,32 +58,35 @@ void spinMultipleTargets(Servo target, int targetNum, int delaySize){
 
     target = targets[targetNum];
     currentTargets[1] = target;
-    target.write(0);
+    target.write(90);
+
     delay(delaySize);
-    currentTargets[0].write(90);
-    currentTargets[1].write(90);
+    currentTargets[0].write(0);
+    currentTargets[1].write(0);
 }
 
 void spinAllTargets(int delaySize){
-  target1.write(0);
-  target2.write(0);
-  target3.write(0);
-  delay(delaySize);
-
   target1.write(90);
   target2.write(90);
   target3.write(90);
+  delay(delaySize);
+  target1.write(0);
+  target2.write(0);
+  target3.write(0);
 }
 
 
 void loop() {
   // put your main code here, to run repeatedly:
 
+
     if(digitalRead(button) == LOW){
       startTarget = true;
     }else{
       startTarget = false;
     }
+
+    
   
   if(startTarget){
   spinTarget();
